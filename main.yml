@@ -1,0 +1,27 @@
+- name: Setting up system
+  hosts: localhost
+  tasks:
+
+    - name: "Install tmux"
+      ansible.builtin.apt:
+        name: tmux
+
+    - name: "Install alacritty"
+      ansible.builtin.apt:
+        name: alacritty
+
+    - name: "Create .fonts directory if does not exists"
+      file:
+        path: $HOME/.fonts
+        state: directory
+        mode: '0755'
+
+    - name: "Download and install Hack Nerd Font"
+      ansible.builtin.unarchive:
+        src: https://github.com/ryanoasis/nerd-fonts/releases/latest/download/Hack.tar.xz
+        dest: $HOME/.fonts
+        remote_src: yes
+
+    - name: "Rebuild font cache"
+      ansible.builtin.command: fc-cache -f
+
